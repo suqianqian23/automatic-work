@@ -13,16 +13,19 @@
 """
 
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
 from typing import Final
 
-from openpyxl import Workbook
-
+# 配置
+FILE_ORDER: int = 1
+FILE_VERSION = re.compile(r"")
+FILE_SUFFIX: str = ".xlsx"
 MAX_SHEET_NAME: Final[int] = 31
 
-wb = Workbook()
+DEFAULT_SETTING: dict = {"default_path": "./default/framework.ini"}
 
 
 def _windows_desktop() -> Path:
@@ -81,6 +84,23 @@ def get_platform_name():
     return Path.home() / "Desktop"
 
 
+def get_project_folder():
+    pass
+
+
+def create_excel_template():
+    pass
+
+
+def get_setting(setting: str | Path):
+
+    target = setting if setting else Path("./default/setting.ini")
+
+
+def get_user_setting(setting: str | Path):
+    pass
+
+
 def main():
 
     # 判断平台
@@ -100,6 +120,40 @@ def main():
     # 现在初版仅进行 sheet-name 的变更
     # 后续增加完整的 excel 模板的控制
     platform_desktop_path = get_platform_name()
+    project_path = platform_desktop_path / "project-folder"
+    project_path.mkdir(parents=True, exist_ok=True)
+
+    while True:
+        if project_path.is_dir():
+            cmd = input("退出请输入: exit 继续随意输入字符")
+
+            if cmd.strip().lower() == "exit":
+                break
+
+            # 文件夹存在的逻辑
+            file_name: str = input("请输入作业指导书名称:______")
+            file_code: str = input("请输入作业指导书编号:______")
+
+            xlsx_file_name = str(FILE_ORDER) + file_name + file_code + FILE_SUFFIX
+            xlsx_file_path = project_path / xlsx_file_name
+
+            # 读取项目文件夹 判断是否存在文件 如果存在对比名字和编号 一样 增加 后面版本
+            # 不一样 新建文件 同时 还要增加用户取消的选项
+            default_setting = get_setting()
+            user_setting = get_user_setting()
+            for sheet_name in get_excel_template(user_setting):
+                pass
+
+            from openpyxl import Workbook
+
+            wb = Workbook()
+            ws = wb.active
+
+            xlsx_file_path.parent.mkdir(parents=True, exist_ok=True)
+            wb.save(xlsx_file_path)
+
+        else:
+            pass
 
 
 if __name__ == "__main__":
