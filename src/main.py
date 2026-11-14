@@ -1,54 +1,38 @@
-import os
-
 import openpyxl as op
 
-# 配置文件
-DEFAULT_SETTING: dict = {
-    "process": ["技术变更通知单", "封面", "变更履历", "PBOM清单"],
-}
-USER_SETTING: dict = {
-    "process": [],
-}
+excel_url = r""
 
 
-# 文件路径
-FOLDER_NAME = ""
-FOLDER_PATH = ""
+def created_excel(sheet_names: list | None, count: int):
+
+    wb = op.Workbook()
+    ws = wb.active
+
+    if sheet_names is None:
+        print()
+
+        if ws is not None:
+            wb.remove(ws)
+
+        for i in range(count):
+            size = str(i)
+            wb.create_sheet(title=size)
+
+    else:
+        for name in sheet_names:
+            wb.create_sheet(name)
 
 
-def load_setting():
+def load_excel(url: str, mode: str):
+    """
+    url: 当前文件的 url 位置
 
-    SHEET_NAMES = []
-
-    if DEFAULT_SETTING:
-        sheet_names = DEFAULT_SETTING.get("process")
-        if sheet_names:
-            for i in sheet_names:
-                return SHEET_NAMES.append(i)
+    """
 
 
 def main():
+    pass
 
-    # 读取文件夹的内容
-    for file_path in os.listdir(FOLDER_PATH):
-        path = os.path.join(FOLDER_PATH, file_path)
 
-        if os.path.isfile(path):
-            with open(path, "r", encoding="utf-8") as f:
-                print(file_path, ":", f.read()[:50])
-
-    chioce_file = input("请输入你想要打开的文件:")
-    new_file = input("是否变更名称: 退出 exit ")
-
-    if new_file.strip().lower() != "exit":
-        if os.path.isfile(chioce_file):
-            os.rename(f"{chioce_file}", f"{new_file}")
-        return
-
-    wb = op.load_workbook(chioce_file)
-
-    for sheet_names in wb.sheetnames:
-        sheet = wb[sheet_names]
-
-        for order in range(10):
-            sheet.title = ""
+if __name__ == "__main__":
+    pass
